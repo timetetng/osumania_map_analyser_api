@@ -63,8 +63,9 @@ app.get("/health", (_req, res) => {
     res.json({ status: "ok" });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Mania Map Analyser API running on http://localhost:${PORT}`);
+const PORT = process.env.PORT || 30000;
+const HOST = process.env.HOST || "0.0.0.0";
+app.listen(PORT, HOST, () => {
+    console.log(`Mania Map Analyser API running on http://${HOST}:${PORT}`);
     console.log(`POST /analyze with multipart/form-data file field 'file' (.osz) and mods[] query params`);
 });

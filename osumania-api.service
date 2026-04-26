@@ -1,0 +1,13 @@
+[Unit]
+Description=Osumania Map Analyser API
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/xingjian/Project/osumania_map_analyser/api
+ExecStart=/usr/bin/node /home/xingjian/Project/osumania_map_analyser/api/src/server.js
+Restart=always
+Environment=PORT=30000
+
+[Install]
+WantedBy=multi-user.target
