@@ -95,7 +95,8 @@ curl -X POST http://localhost:3000/analyze \
     "cvtFlag": null,
     "patternReport": { ... },
     "interludeStar": 9.29,
-    "etternaValues": null
+    "etternaValues": null,
+    "ppMax": 1125
   }
 }
 ```
@@ -104,7 +105,7 @@ curl -X POST http://localhost:3000/analyze \
 
 | 字段 | 类型 | 说明 |
 |------|------|------|
-| `starRating` | number | Star Rating (SR) |
+| `starRating` | number | 官方星数（使用 rosu-pp-js 计算） |
 | `lnRatio` | number | Long Note 比率 (0~1) |
 | `columnCount` | number | Key 数 (4/6/7) |
 | `difficultyLabel` | string | 难度等级文字描述，格式为 `RC等级 \|\| LN等级` |
@@ -115,6 +116,7 @@ curl -X POST http://localhost:3000/analyze \
 | `patternReport` | object\|null | Pattern 分析报告（需 includeExtras） |
 | `interludeStar` | number\|null | Interlude SR（需 includeExtras） |
 | `etternaValues` | object\|null | Etterna MSD 7项技能值（需 includeExtras） |
+| `ppMax` | number | 谱面最大 PP（100% 精度理论值） |
 
 ##### difficultyLabel 格式
 

@@ -1,6 +1,7 @@
 import { readFileSync } from "fs";
 import { fileURLToPath } from "url";
 import { dirname, join } from "path";
+import * as rosu from "rosu-pp-js";
 import { calculate as calculateSunny } from "../../ManiaMapAnalyser by Leo_Black/js/rework/sunnyAlgorithm.js";
 import { OsuFileParser } from "../../ManiaMapAnalyser by Leo_Black/js/parser/osuFileParser.js";
 import { SR_INTERVALS } from "../../ManiaMapAnalyser by Leo_Black/js/estimator/intervals.js";
@@ -70,6 +71,36 @@ function isValidResult(result) {
     return result && Number.isFinite(result.star) && Number.isFinite(result.lnRatio);
 }
 
+function modsToBitflags(mods) {
+    const modMap = {
+        DT: 64, NC: 512, HT: 256, HR: 16, EZ: 2, IN: 1024, HO: 2048,
+    };
+    let flags = 0;
+    for (const mod of mods) {
+        const upper = String(mod).toUpperCase();
+        if (modMap[upper]) flags |= modMap[upper];
+    }
+    return flags;
+}
+
+function calculateOfficialStarRating(osuText, speedRate, mods) {
+    try {
+        const map = new rosu.Beatmap(osuText);
+        const bitflags = modsToBitflags(mods);
+
+        const diff = new rosu.Difficulty({ mods: bitflags, clockRate: speedRate });
+        const diffAttrs = diff.calculate(map);
+
+        const perf = new rosu.Performance({ mods: bitflags, accuracy: 100 });
+        const perfAttrs = perf.calculate(diffAttrs);
+
+        map.free();
+        return { stars: diffAttrs.stars, pp: Math.round(perfAttrs.pp) };
+    } catch {
+        return null;
+    }
+}
+
 export function analyzeOsuText(osuText, mods = [], options = {}) {
     const algorithm = options.algorithm || "Mixed";
     const speedRate = modToSpeedRate(mods);
@@ -91,8 +122,12 @@ export function analyzeOsuText(osuText, mods = [], options = {}) {
     const normalized = normalizeReworkResult(rework);
     const difficultyLabel = rework.estDiff || estDiff(normalized.star, normalized.lnRatio, normalized.columnCount);
 
+    const officialResult = calculateOfficialStarRating(osuText, speedRate, mods);
+    const ppMax = officialResult?.pp ?? null;
+    const officialSr = officialResult?.stars ?? normalized.star;
+
     return {
-        starRating: normalized.star,
+        starRating: officialSr,
         lnRatio: normalized.lnRatio,
         columnCount: normalized.columnCount,
         difficultyLabel,
@@ -100,6 +135,7 @@ export function analyzeOsuText(osuText, mods = [], options = {}) {
         speedRate,
         odFlag,
         cvtFlag,
+        ppMax,
     };
 }
 
@@ -123,6 +159,10 @@ export async function fullAnalyzeOsuText(osuText, mods = [], options = {}) {
 
     const normalized = normalizeReworkResult(rework);
     const difficultyLabel = rework.estDiff || estDiff(normalized.star, normalized.lnRatio, normalized.columnCount);
+
+    const officialResult = calculateOfficialStarRating(osuText, speedRate, mods);
+    const ppMax = officialResult?.pp ?? null;
+    const officialSr = officialResult?.stars ?? normalized.star;
 
     let patternResult = null;
     try {
@@ -156,7 +196,7 @@ export async function fullAnalyzeOsuText(osuText, mods = [], options = {}) {
     }
 
     return {
-        starRating: normalized.star,
+        starRating: officialSr,
         lnRatio: normalized.lnRatio,
         columnCount: normalized.columnCount,
         difficultyLabel,
@@ -167,5 +207,6 @@ export async function fullAnalyzeOsuText(osuText, mods = [], options = {}) {
         patternReport: patternResult?.report || null,
         interludeStar,
         etternaValues,
+        ppMax,
     };
 }
