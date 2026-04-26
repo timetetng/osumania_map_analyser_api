@@ -116,7 +116,7 @@ curl -X POST http://localhost:3000/analyze \
 | `patternReport` | object\|null | Pattern 分析报告（需 includeExtras） |
 | `interludeStar` | number\|null | Interlude SR（需 includeExtras） |
 | `etternaValues` | object\|null | Etterna MSD 7项技能值（需 includeExtras） |
-| `ppMax` | number | 谱面最大 PP（100% 精度理论值） |
+| `ppMax` | number | 谱面最大 PP（100% 精度理论值，基于 rosu-pp-js 计算） |
 
 ##### difficultyLabel 格式
 
