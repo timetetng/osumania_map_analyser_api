@@ -2,6 +2,8 @@
 
 REST API for osu!mania beatmap difficulty analysis, wrapping the algorithms from [ManiaMapAnalyser by Leo_Black](../ManiaMapAnalyser%20by%20Leo_Black/).
 
+PP calculation uses [rosu-pp-js](https://github.com/MaxOhn/rosu-pp-js).
+
 ## Quick Start
 
 ```bash
