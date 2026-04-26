@@ -125,9 +125,11 @@ export function analyzeOsuText(osuText, mods = [], options = {}) {
     const officialResult = calculateOfficialStarRating(osuText, speedRate, mods);
     const ppMax = officialResult?.pp ?? null;
     const officialSr = officialResult?.stars ?? normalized.star;
+    const reworkSr = normalized.star;
 
     return {
         starRating: officialSr,
+        reworkSr,
         lnRatio: normalized.lnRatio,
         columnCount: normalized.columnCount,
         difficultyLabel,
@@ -163,6 +165,7 @@ export async function fullAnalyzeOsuText(osuText, mods = [], options = {}) {
     const officialResult = calculateOfficialStarRating(osuText, speedRate, mods);
     const ppMax = officialResult?.pp ?? null;
     const officialSr = officialResult?.stars ?? normalized.star;
+    const reworkSr = normalized.star;
 
     let patternResult = null;
     try {
@@ -197,6 +200,7 @@ export async function fullAnalyzeOsuText(osuText, mods = [], options = {}) {
 
     return {
         starRating: officialSr,
+        reworkSr,
         lnRatio: normalized.lnRatio,
         columnCount: normalized.columnCount,
         difficultyLabel,

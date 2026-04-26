@@ -85,7 +85,8 @@ curl -X POST http://localhost:3000/analyze \
   "success": true,
   "filename": "map.osz",
   "result": {
-    "starRating": 7.451,
+    "starRating": 7.82,
+    "reworkSr": 7.451,
     "lnRatio": 0.374,
     "columnCount": 4,
     "difficultyLabel": "Gamma low || LN 13 mid/low",
@@ -106,6 +107,7 @@ curl -X POST http://localhost:3000/analyze \
 | 字段 | 类型 | 说明 |
 |------|------|------|
 | `starRating` | number | 官方星数（使用 rosu-pp-js 计算） |
+| `reworkSr` | number | Rework 算法估算的星数 |
 | `lnRatio` | number | Long Note 比率 (0~1) |
 | `columnCount` | number | Key 数 (4/6/7) |
 | `difficultyLabel` | string | 难度等级文字描述，格式为 `RC等级 \|\| LN等级` |
