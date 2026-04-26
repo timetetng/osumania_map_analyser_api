@@ -1,0 +1,15 @@
+# osumania-map-analyser-api
+
+REST API for osu!mania beatmap difficulty analysis, wrapping the algorithms from [ManiaMapAnalyser by Leo_Black](../ManiaMapAnalyser%20by%20Leo_Black/).
+
+## Quick Start
+
+```bash
+pnpm install
+pnpm dev
+```
+
+## Documentation
+
+- [DEPLOY.md](./DEPLOY.md) — 部署指南（如何在原项目基础上运行 API）
+- [API.md](./API.md) — API 调用文档（请求参数、响应格式、示例）
